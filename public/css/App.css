@@ -1,0 +1,24 @@
+
+#content_0 {
+    height: auto;
+    padding: 8px;
+}
+
+#test_0 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 0px !important;
+}
+
+body {
+    margin: 0;
+}
+
+.ant-layout-content {
+    padding: 0 !important;
+}
+
+#task-board {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
