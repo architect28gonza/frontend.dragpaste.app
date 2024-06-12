@@ -1,10 +1,11 @@
-import React from 'react';
-import { Layout, Menu, Breadcrumb, theme } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Menu, Breadcrumb, theme, Button } from 'antd';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { DragDropProvider, Board } from './components';
 import { api } from './assets';
-import './styles.css';
-
+import '../public/css/styles.css'
+import { ColumnType, ElementComponentType } from './types/types.export';
+import { KEY_LOCALSTORAGE } from './local.storage';
 const { Header, Content, Sider } = Layout;
 
 const generateNavItems = (count: number, prefix = 'Configuracion') => {
@@ -30,6 +31,39 @@ const App: React.FC = () => {
 
    const navItems = generateNavItems(4);
    const subMenuItems = generateSubMenuItems(3);
+
+   const [columnsElement, setColumnsElement] = useState<ColumnType[]>(api.columns);
+
+   const onClickForm = () => {
+      const { localStorage } = window;
+      const formElement = localStorage.getItem(KEY_LOCALSTORAGE);
+
+      if (formElement !== null) {
+         const elements: ElementComponentType[] = JSON.parse(formElement);
+         setUpdateElementView(elements);
+      }
+   };
+
+   const setUpdateElementView = (elements: ElementComponentType[]) => {
+      setColumnsElement(prevColumns => {
+         const updatedColumns = [...prevColumns];
+         elements.forEach(item => {
+            const filas = item.element;
+            if (filas.length !== 0) {
+               filas.forEach(elementItem => {
+                  const { final_column: column, final_row: row, name_element: key } = elementItem;
+                  updatedColumns[0].tasks.forEach(parent => {
+                     if (key === parent.key) {
+                        updatedColumns[column].tasks.splice(row, 0, parent);
+                     }
+                  });
+               });
+            }
+         });
+         return updatedColumns;
+      });
+   }
+
 
    return (
       <Layout>
@@ -68,7 +102,8 @@ const App: React.FC = () => {
                      borderRadius: borderRadiusLG,
                   }}>
                   <div className="App">
-                     <DragDropProvider data={api.columns}>
+                     <Button type="link" onClick={onClickForm}>Recuperar formulario</Button>
+                     <DragDropProvider data={columnsElement}>
                         <Board />
                      </DragDropProvider>
                   </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from 'antd';
-import { inputStyle } from '../../styles';
-import { ILabel } from './Label';
+import { inputStyle } from '../../../public/css/styles';
+import InLabel from './Label';
 
 const { TextArea } = Input;
 
@@ -12,7 +12,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) 
 const InTextArea: React.FC = () => {
     return (
         <>
-            <ILabel />
+            <InLabel />
             <TextArea placeholder="Ingrese su descripcion" style={inputStyle} allowClear onChange={onChange} />
         </>
     )

@@ -1,13 +1,15 @@
 import { Input } from "antd";
 import React  from "react";
-import { inputStyle } from "../../styles";
-import { ILabel } from "./Label";
+import { inputStyle } from "../../../public/css/styles";
+import InLabel from "./Label";
 
-export const InputText: React.FC = () => {
+const InInputText: React.FC = () => {
     return (
         <div>
-            <ILabel />
+            <InLabel />
             <Input style={inputStyle} placeholder="Digite campo de texto" />
         </div>
     )
 }
+
+export default InInputText;

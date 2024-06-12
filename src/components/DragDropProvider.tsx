@@ -3,6 +3,7 @@ import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType, ElementComponentType, PositionType } from '../types/types.export';
 import { lstElements } from '../assets';
+import { addlocalStorage } from '../local.storage';
 
 // Types for Drag and Drop
 type DragDropProps = (source: DraggableLocation, destination: DraggableLocation) => void;
@@ -11,8 +12,8 @@ type ColumnDropshadowProps = (event: any, destinationIndex: number, sourceIndex:
 type RowDropshadow = { marginTop: number; height: number };
 type ColDropshadow = { marginLeft: number; height: number };
 type DragDropContextProps = {
-    onSubmit: (newRow: string, colIndex: number) => void;
-    handleDuplicateTask: (rowIndex: number, colIndex: number) => void;
+    // onSubmit: (newRow: string, colIndex: number) => void;
+    // handleDuplicateTask: (rowIndex: number, colIndex: number) => void;
     handleNewColumn: (newName: string) => void;
     handleRemoveTask: (rowIndex: number, colIndex: number) => void;
     handleDeleteColumn: (colIndex: number) => void;
@@ -60,10 +61,7 @@ const getStyle = (
 
 const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ children, data }) => {
     const [columns, setColumns] = useState<ColumnType[]>(data);
-
     const [lstElementsComponent, setLstElementsComponent] = useState<ElementComponentType[]>(lstElements);
-
-
     const [colDropshadowProps, setColDropshadowProps] = useState<ColDropshadow>({
         marginLeft: 0,
         height: 0,
@@ -117,9 +115,11 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
     const setAddNewElement = (indexFilaInicio: number, indexFilainicio: number, position: number) => {
         setColumns((prev) => {
             const updated = [...prev];
-            const newContent = columns[position].tasks[indexFilainicio].content
-            if (newContent != undefined) {
-                updated[0].tasks.splice(indexFilaInicio, 0, { content: newContent, id: uuidv4() });
+            const content = columns[position].tasks[indexFilainicio].content
+            const key = columns[position].tasks[indexFilainicio].key
+
+            if (content != undefined) {
+                updated[0].tasks.splice(indexFilaInicio, 0, { content, key, id: uuidv4() });
             }
             return updated;
         });
@@ -136,7 +136,7 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
             const previous_row = objectElement.previous_row
 
             const contentElement = lstTemp.find(({ id }) => id === destination.droppableId)
-            const nameElement: string = contentElement?.tasks[final_row].content.type.name;
+            const nameElement: string | any = contentElement?.tasks[final_row].key;
             objectElement.name_element = nameElement;
             updated[final_column].element.splice(final_row, 0, objectElement)
 
@@ -144,6 +144,7 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
             if (previous_column !== 0) {
                 updated[previous_column].element.splice(previous_row, 1) /* Eliminar el elemento de la columna anterior */
             }
+            addlocalStorage(updated);
             return updated;
         })
 
@@ -235,10 +236,13 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
                 const previousColumnFinal = lstTemp.indexOf(previousColumn);
                 const positionColumnFinal = lstTemp.indexOf(currentColumn);
 
-                updated[positionColumnFinal].element[final_row].final_column = positionColumnFinal
-                updated[positionColumnFinal].element[final_row].previous_column = previousColumnFinal
-                updated[positionColumnFinal].element[final_row].final_row = final_row
-                updated[positionColumnFinal].element[final_row].previous_row = previous_row   
+                if (updated[positionColumnFinal].element[final_row] !== undefined) {
+                    updated[positionColumnFinal].element[final_row].final_column = positionColumnFinal;
+                    updated[positionColumnFinal].element[final_row].previous_column = previousColumnFinal;
+                    updated[positionColumnFinal].element[final_row].final_row = final_row;
+                    updated[positionColumnFinal].element[final_row].previous_row = previous_row;
+                } else console.log(`Posicion no encontrada : Columna: ${positionColumnFinal} - Fila : ${final_row}`);
+                addlocalStorage(updated);
             }
             return updated;
         })
@@ -248,13 +252,13 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
     const handleDeleteColumn = (colIndex: number) =>
         setColumns((prev) => prev.filter((_, index) => index !== colIndex));
 
-    const onSubmit = (newRow: string, colIndex: number) => {
-        setColumns((prev) => {
-            const updated = [...prev];
-            updated[colIndex].tasks.push({ content: newRow, id: uuidv4() });
-            return updated;
-        });
-    };
+    // const onSubmit = (newRow: any, colIndex: number) => {
+    //     setColumns((prev) => {
+    //         const updated = [...prev];
+    //         updated[colIndex].tasks.push({ content: newRow, id: uuidv4() });
+    //         return updated;
+    //     });
+    // };
 
     const handleRemoveTask = (rowIndex: number, colIndex: number) => {
         setColumns((prev) => {
@@ -264,14 +268,14 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
         });
     };
 
-    const handleDuplicateTask = (rowIndex: number, colIndex: number) => {
-        setColumns((prev) => {
-            const updated = [...prev];
-            const taskContent = updated[colIndex].tasks[rowIndex].content;
-            updated[colIndex].tasks.push({ content: taskContent, id: uuidv4() });
-            return updated;
-        });
-    };
+    // const handleDuplicateTask = (rowIndex: number, colIndex: number) => {
+    //     setColumns((prev) => {
+    //         const updated = [...prev];
+    //         const taskContent = updated[colIndex].tasks[rowIndex].content;
+    //         updated[colIndex].tasks.push({ content: taskContent, id: uuidv4() });
+    //         return updated;
+    //     });
+    // };
 
     const handleNewColumn = (newName: string) => {
         setColumns((prev) => [
@@ -283,8 +287,8 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
     return (
         <DragDropContext.Provider
             value={{
-                onSubmit,
-                handleDuplicateTask,
+                // onSubmit,
+                // handleDuplicateTask,
                 handleNewColumn,
                 handleRemoveTask,
                 handleDeleteColumn,

@@ -1,5 +1,6 @@
 export type TaskType = {
     id: any
+    key: string
     content: any
 }
 

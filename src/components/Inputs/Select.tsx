@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, Select, Space } from 'antd';
 import type { InputRef } from 'antd';
-import { inputStyle } from '../../styles';
-import { ILabel } from './Label';
+import { inputStyle } from '../../../public/css/styles';
+import InLabel from './Label';
 
 let index = 0;
 
@@ -27,7 +27,7 @@ const InSelect: React.FC = () => {
 
     return (
         <div>
-            <ILabel />
+            <InLabel />
             <Select
                 style={inputStyle}
                 placeholder="seleccionar item"

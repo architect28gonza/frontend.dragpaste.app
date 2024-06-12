@@ -1,14 +1,14 @@
-import { DatePickerProps, DatePicker } from "antd";
-import { inputStyle } from "../../styles";
-import { ILabel } from "./Label";
+import { DatePicker } from "antd";
+import { inputStyle } from "../../../public/css/styles";
+import InLabel from "./Label";
 
-export const InputDate: React.FC = () => {
-    const onChange: DatePickerProps['onChange'] = (date, dateString) => console.log(date, dateString);
+const InInputDate: React.FC = () => {
     return (
         <div>
-            <ILabel />
-            <DatePicker style={inputStyle} placeholder="AÑO-MES-DIA" onChange={onChange} />
+            <InLabel />
+            <DatePicker style={inputStyle} placeholder="AÑO-MES-DIA" />
         </div>
-
     )
 }
+
+export default InInputDate;
