@@ -14,7 +14,7 @@ const InputLevel: React.FC = () => {
 	};
 
 	return (
-		<div>
+		<div className='container-in-input-otp'>
 			<InLabel />
 			<Flex gap="middle" align="flex-start" style={{ marginTop: 5 }} vertical>
 				<Input.OTP formatter={(str) => str.toUpperCase()} {...sharedProps} />

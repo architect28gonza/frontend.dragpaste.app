@@ -4,7 +4,7 @@ import InLabel from "./Label";
 
 const InInputDate: React.FC = () => {
     return (
-        <div>
+        <div className='container-in-datepicker'>
             <InLabel />
             <DatePicker style={inputStyle} placeholder="AÑO-MES-DIA" />
         </div>

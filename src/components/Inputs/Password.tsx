@@ -5,7 +5,7 @@ import InLabel from './Label';
 
 const InPassword: React.FC = () => {
     return (
-        <div>
+        <div className='container-in-password'>
             <InLabel />
             <Input.Password
                 style={{marginTop: 5}}

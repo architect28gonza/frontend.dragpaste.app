@@ -32,8 +32,6 @@ export const Container = styled.div<{ isDragging?: boolean }>`
    position: relative;
    ${({ isDragging }) => isDragging && 'opacity: 0.6;'}
 `
-// height: calc(100vh - 280px);
-   
 
 export const Title = styled.div`
    display: flex;

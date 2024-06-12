@@ -1,7 +1,8 @@
 import React from 'react'
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 import styled from 'styled-components'
-import { TaskType } from '../../assets'
+import { TaskType } from '../../types/types.export'
+
 
 const Container = styled.div`
    text-align : left
@@ -23,8 +24,7 @@ const Row: React.FC<Props> = ({ task, index }) => (
             <Container
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            ref={provided.innerRef}
-         >
+            ref={provided.innerRef}>
             {task.content}
          </Container>
          </>

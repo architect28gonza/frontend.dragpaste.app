@@ -26,7 +26,7 @@ const InSelect: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className='container-in-select'>
             <InLabel />
             <Select
                 style={inputStyle}

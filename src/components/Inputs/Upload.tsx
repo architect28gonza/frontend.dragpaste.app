@@ -24,10 +24,12 @@ const props: UploadProps = {
 
 const InUploadOut: React.FC = () => {
     return (
-        <Upload {...props}>
-            <InLabel />
-            <Button style={{ width: '100%', color: '#444444' }} icon={<UploadOutlined />}>Click para subir archivo</Button>
-        </Upload>
+        <div className='container-in-upload'>
+            <Upload {...props}>
+                <InLabel />
+                <Button style={{ width: '100%', color: '#444444' }} icon={<UploadOutlined />}>Click para subir archivo</Button>
+            </Upload>
+        </div>
     )
 }
 

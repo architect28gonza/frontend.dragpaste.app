@@ -11,10 +11,10 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) 
 
 const InTextArea: React.FC = () => {
     return (
-        <>
+        <div className='container-in-textarea'>
             <InLabel />
             <TextArea placeholder="Ingrese su descripcion" style={inputStyle} allowClear onChange={onChange} />
-        </>
+        </div>
     )
 }
 

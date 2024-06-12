@@ -3,7 +3,7 @@ import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType, ElementComponentType, PositionType } from '../types/types.export';
 import { lstElements } from '../assets';
-import { addlocalStorage } from '../local.storage';
+import { addlocalStorage, listLocalStorage } from '../local.storage';
 
 // Types for Drag and Drop
 type DragDropProps = (source: DraggableLocation, destination: DraggableLocation) => void;
@@ -132,8 +132,8 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
 
             const final_row = objectElement.final_row;
             const final_column = objectElement.final_column;
-            const previous_column = objectElement.previous_column
-            const previous_row = objectElement.previous_row
+            const previous_column = objectElement.previous_column;
+            const previous_row = objectElement.previous_row;
 
             const contentElement = lstTemp.find(({ id }) => id === destination.droppableId)
             const nameElement: string | any = contentElement?.tasks[final_row].key;
@@ -147,7 +147,6 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
             addlocalStorage(updated);
             return updated;
         })
-
     }
 
     const handleRowMove: DragDropProps = (source, destination) => {

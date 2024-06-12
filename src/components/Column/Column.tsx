@@ -42,7 +42,8 @@ const Column: React.FC<Props> = ({ column, columnIndex }) => {
                </TitleContainer>
                <Droppable droppableId={column.id} type="task">
                   {(prov: DroppableProvided, snapshot: DroppableStateSnapshot) => (
-                     <RowContainer id={`test_${columnIndex}`} ref={prov.innerRef} {...prov.droppableProps}>
+                     <RowContainer
+                        id={`row_${columnIndex}`} ref={prov.innerRef} {...prov.droppableProps}>
                         {rowContent()}
                         {prov.placeholder}
                         <DropshadowContainer>

@@ -8,7 +8,7 @@ const onChange: InputNumberProps['onChange'] = (value) => console.log('changed',
 
 const InNumber: React.FC = () => {
     return (
-        <div>
+        <div className='container-in-number'>
             <InLabel />
             <InputNumber style={inputStyle} placeholder="Digite valor numerico" min={1} max={1000000} onChange={onChange} />
         </div>

@@ -5,7 +5,7 @@ import InLabel from "./Label";
 
 const InInputText: React.FC = () => {
     return (
-        <div>
+        <div className='container-in-input'>
             <InLabel />
             <Input style={inputStyle} placeholder="Digite campo de texto" />
         </div>

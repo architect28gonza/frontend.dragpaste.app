@@ -10,7 +10,7 @@ dayjs.extend(customParseFormat);
 const InTimer: React.FC = () => {
 
     return (
-        <div>
+        <div className='container-in-timer'>
             <InLabel />
             <TimePicker style={inputStyle}
                 placeholder='seleccione hora'
