@@ -20,14 +20,15 @@ type Props = {
 const Row: React.FC<Props> = ({ task, index }) => (
    <Draggable draggableId={task.id} index={index}>
       {(provided: DraggableProvided) => (
-         <>
-            <Container
+         <Container
+            id={`row_${index}`}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}>
+            {/* {(typeof task.content === 'function') ? task.content() : task.content} */}
             {task.content}
+
          </Container>
-         </>
       )}
    </Draggable>
 )

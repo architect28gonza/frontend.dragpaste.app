@@ -22,7 +22,8 @@ export const api: TaskBoardType = {
          id: v4(),
          title: <span><b>COMPONENTES PARA CREAR FORMULARIO</b></span>,
          tasks: [
-            { id: v4(), key: 'input:text', content: <InInputText /> },
+            // { id: v4(), key: 'input:text', content: () => <InInputText /> },
+            { id: v4(), key: 'input:password', content: <InInputText /> },
             { id: v4(), key: 'input:password', content: <InPassword /> },
             { id: v4(), key: 'input:date', content: <InInputDate /> },
             { id: v4(), key: 'input:number', content: <InNumber /> },

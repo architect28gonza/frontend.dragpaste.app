@@ -14,17 +14,25 @@ export type TaskBoardType = {
     columns: ColumnType[]
 }
 
-
 export type PositionType = {
     previous_row: number
     previous_column: number
     final_row: number
     final_column: number
-    name_element: string
+    key: string,
+    label: string
+    body: any
 }
-
 
 export type ElementComponentType = {
     title: string
     element: PositionType[]
+}
+
+export type InputType = {
+    label: string
+}
+
+export const structureInput: InputType = {
+    label : ""
 }

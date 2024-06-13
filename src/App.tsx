@@ -51,10 +51,12 @@ const App: React.FC = () => {
             const filas = item.element;
             if (filas.length !== 0) {
                filas.forEach(elementItem => {
-                  const { final_column: column, final_row: row, name_element: key } = elementItem;
-                  updatedColumns[0].tasks.forEach(parent => {
-                     if (key === parent.key) {
-                        updatedColumns[column].tasks.splice(row, 0, parent);
+                  const { final_column: column, final_row: row, key: key } = elementItem;
+                  updatedColumns[0].tasks.forEach(element => {
+                     if (key === element.key) {
+                        console.log(element.content);
+                        
+                        updatedColumns[column].tasks.splice(row, 0, element);
                      }
                   });
                });
