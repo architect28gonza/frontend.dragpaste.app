@@ -33,6 +33,18 @@ export type InputType = {
     label: string
 }
 
-export const structureInput: InputType = {
-    label : ""
+export interface PropsIGeneric {
+    propsComponent?: {
+        label: {
+            value: string;
+        };
+        body: any;
+        row: number;
+        column: number;
+    };
+}
+
+export interface PositionElementI {
+    row: number;
+    column: number;
 }

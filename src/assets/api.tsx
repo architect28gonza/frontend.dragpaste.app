@@ -15,27 +15,25 @@ import InRadio from '../components/Inputs/Radio'
 import InLabel from '../components/Inputs/Label'
 import InSwitch from '../components/Inputs/Switch'
 
-
 export const api: TaskBoardType = {
    columns: [
       {
          id: v4(),
          title: <span><b>COMPONENTES PARA CREAR FORMULARIO</b></span>,
          tasks: [
-            // { id: v4(), key: 'input:text', content: () => <InInputText /> },
-            { id: v4(), key: 'input:password', content: <InInputText /> },
-            { id: v4(), key: 'input:password', content: <InPassword /> },
-            { id: v4(), key: 'input:date', content: <InInputDate /> },
-            { id: v4(), key: 'input:number', content: <InNumber /> },
-            { id: v4(), key: 'input:timer', content: <InTimer /> },
-            { id: v4(), key: 'input:select', content: <InSelect /> },
-            { id: v4(), key: 'input:level', content: <InputLevel /> },
-            { id: v4(), key: 'input:upload', content: <InUploadOut /> },
-            { id: v4(), key: 'input:textarea', content: <InTextArea /> },
-            { id: v4(), key: 'input:checkbox', content: <InCheckbox /> },
-            { id: v4(), key: 'input:radio', content: <InRadio /> },
-            { id: v4(), key: 'input:label', content: <InLabel /> },
-            { id: v4(), key: 'input:switch', content: <InSwitch /> }
+            { id: v4(), key: 'input:text', content: (props: any) => <InInputText {...props} /> },
+            { id: v4(), key: 'input:password', content: (props: any) => <InPassword {...props} /> },
+            { id: v4(), key: 'input:date', content: (props: any) => <InInputDate {...props} /> },
+            { id: v4(), key: 'input:number', content: (props: any) => <InNumber {...props} /> },
+            { id: v4(), key: 'input:timer', content: (props: any) => <InTimer {...props} /> },
+            { id: v4(), key: 'input:select', content: (props: any) => <InSelect {...props} /> },
+            { id: v4(), key: 'input:level', content: (props: any) => <InputLevel {...props} /> },
+            { id: v4(), key: 'input:upload', content: (props: any) => <InUploadOut {...props} /> },
+            { id: v4(), key: 'input:textarea', content: (props: any) => <InTextArea {...props} /> },
+            { id: v4(), key: 'input:checkbox', content: (props: any) => <InCheckbox {...props} /> },
+            { id: v4(), key: 'input:radio', content: (props: any) => <InRadio {...props} /> },
+            { id: v4(), key: 'input:label', content: (props: any) => <InLabel {...props} /> },
+            { id: v4(), key: 'input:switch', content: (props: any) => <InSwitch {...props} /> }
          ],
       },
       {

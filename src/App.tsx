@@ -47,16 +47,24 @@ const App: React.FC = () => {
    const setUpdateElementView = (elements: ElementComponentType[]) => {
       setColumnsElement(prevColumns => {
          const updatedColumns = [...prevColumns];
+
          elements.forEach(item => {
             const filas = item.element;
             if (filas.length !== 0) {
                filas.forEach(elementItem => {
-                  const { final_column: column, final_row: row, key: key } = elementItem;
+                  const { final_column, final_row, key, label, body } = elementItem;
                   updatedColumns[0].tasks.forEach(element => {
                      if (key === element.key) {
-                        console.log(element.content);
-                        
-                        updatedColumns[column].tasks.splice(row, 0, element);
+                        const propsComponent = {
+                           label: { value: label },
+                           body: { value: body },
+                           row: final_row,
+                           column: final_column
+                        }
+                        const updatedElement = {
+                           ...element, content: (props: any) => element.content({ ...props, propsComponent })
+                        };
+                        updatedColumns[final_column].tasks.splice(final_row, 0, updatedElement);
                      }
                   });
                });
