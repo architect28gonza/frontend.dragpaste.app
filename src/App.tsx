@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Breadcrumb, theme, Button } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, theme } from 'antd';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { DragDropProvider, Board } from './components';
 import { api } from './assets';
-import '../public/css/styles.css'
+import '../public/css/styles.css';
 import { ColumnType, ElementComponentType } from './types/types.export';
-import { KEY_LOCALSTORAGE } from './local.storage';
+import { listLocalStorage } from './local.storage';
+import { v4 } from 'uuid';
+
 const { Header, Content, Sider } = Layout;
 
 const generateNavItems = (count: number, prefix = 'Configuracion') => {
@@ -35,13 +37,8 @@ const App: React.FC = () => {
    const [columnsElement, setColumnsElement] = useState<ColumnType[]>(api.columns);
 
    const onClickForm = () => {
-      const { localStorage } = window;
-      const formElement = localStorage.getItem(KEY_LOCALSTORAGE);
-
-      if (formElement !== null) {
-         const elements: ElementComponentType[] = JSON.parse(formElement);
-         setUpdateElementView(elements);
-      }
+      const elements: ElementComponentType[] = listLocalStorage();
+      setUpdateElementView(elements);
    };
 
    const setUpdateElementView = (elements: ElementComponentType[]) => {
@@ -52,28 +49,31 @@ const App: React.FC = () => {
             const filas = item.element;
             if (filas.length !== 0) {
                filas.forEach(elementItem => {
-                  const { final_column, final_row, key, label, body } = elementItem;
-                  updatedColumns[0].tasks.forEach(element => {
-                     if (key === element.key) {
-                        const propsComponent = {
-                           label: { value: label },
-                           body: { value: body },
-                           row: final_row,
-                           column: final_column
+                  if (elementItem !== null) {
+                     const { final_column, final_row, key, label, body } = elementItem;
+                     updatedColumns[0].tasks.forEach(element => {
+                        if (key === element.key) {
+                           const propsComponent = {
+                              label: { value: label },
+                              body: { value: body },
+                              row: final_row,
+                              column: final_column
+                           };
+                           const updatedElement = {
+                              ...element,
+                              id: v4(),
+                              content: (props: any) => element.content({ ...props, propsComponent })
+                           };
+                           updatedColumns[final_column].tasks.splice(final_row, 0, updatedElement);
                         }
-                        const updatedElement = {
-                           ...element, content: (props: any) => element.content({ ...props, propsComponent })
-                        };
-                        updatedColumns[final_column].tasks.splice(final_row, 0, updatedElement);
-                     }
-                  });
+                     });
+                  }
                });
             }
          });
          return updatedColumns;
       });
-   }
-
+   };
 
    return (
       <Layout>

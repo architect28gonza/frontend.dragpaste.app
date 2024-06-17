@@ -3,7 +3,8 @@ import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType, ElementComponentType, PositionType } from '../types/types.export';
 import { lstElements } from '../assets';
-import { addlocalStorage, addUpdateLocalStorage, isEmptyLocalStorage } from '../local.storage';
+import { addLocalStorage, addUpdateLocalStorage, isEmptyLocalStorage, listLocalStorage } from '../local.storage';
+import LOG from 'loglevel';
 
 // Types for Drag and Drop
 type DragDropProps = (source: DraggableLocation, destination: DraggableLocation) => void;
@@ -59,7 +60,7 @@ const getStyle = (
 
 const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ children, data }) => {
     const [columns, setColumns] = useState<ColumnType[]>(data);
-    const [lstElementsComponent, setLstElementsComponent] = useState<ElementComponentType[]>(lstElements);
+    const [lstElementsComponent, setLstElementsComponent] = useState<ElementComponentType[]>((!isEmptyLocalStorage()) ? listLocalStorage() : lstElements);
     const [colDropshadowProps, setColDropshadowProps] = useState<ColDropshadow>({
         marginLeft: 0,
         height: 0,
@@ -144,16 +145,10 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
             if (previous_column !== 0) {
                 updated[previous_column].element.splice(previous_row, 1) /* Eliminar el elemento de la columna anterior */
             }
-            if (isEmptyLocalStorage()) {
-                addlocalStorage(updated);
-            } else {
-                addUpdateLocalStorage(updated[final_column].element[final_row], final_row, final_column)
-            }
+            localStorageInsert(updated, final_row, final_column);
             return updated;
         })
     }
-
-
 
     const handleRowMove: DragDropProps = (source, destination) => {
         if (source.droppableId !== destination.droppableId) {
@@ -246,17 +241,21 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
                     updated[positionColumnFinal].element[final_row].previous_column = previousColumnFinal;
                     updated[positionColumnFinal].element[final_row].final_row = final_row;
                     updated[positionColumnFinal].element[final_row].previous_row = previous_row;
-                } else console.log(`Posicion no encontrada : Columna: ${positionColumnFinal} - Fila : ${final_row}`);
+                    localStorageInsert(updated, final_row, positionColumnFinal);
 
-                if (isEmptyLocalStorage()) {
-                    addlocalStorage(updated);
-                } else {
-                    console.log("Actualiacion v2");
-                    addUpdateLocalStorage(updated[positionColumnFinal].element[final_row], final_row, positionColumnFinal)
-                }
+                } else LOG.warn(`Posicion no encontrada : Columna: ${positionColumnFinal} - Fila : ${final_row}`);
             }
             return updated;
         })
+    }
+
+    const localStorageInsert = (updated: ElementComponentType[], final_row: number, final_column: number) => {
+        if (isEmptyLocalStorage()) {
+            addLocalStorage(updated);
+        } else {
+            addUpdateLocalStorage(updated[final_column].element[final_row], final_row, final_column)
+
+        }
     }
 
 

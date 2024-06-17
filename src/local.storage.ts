@@ -1,79 +1,67 @@
+import LOG from 'loglevel';
 import { ElementComponentType, PositionType } from "./types/types.export";
 
-export const KEY_LOCALSTORAGE: string = 'elementsForm';
+export const KEY_LOCALSTORAGE = 'elementsForm';
 
+const getLocalStorage = (): Storage => window.localStorage;
 
 export const isEmptyLocalStorage = (): boolean => {
-    const { localStorage } = window
-    const localStorageObject = localStorage.getItem(KEY_LOCALSTORAGE);
-    return (localStorageObject === null);
+    return getLocalStorage().getItem(KEY_LOCALSTORAGE) === null;
 }
 
-export const addlocalStorage = (
-    lstElements: ElementComponentType[]
-) => {
-    const { localStorage } = window;
-    localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
+export const addLocalStorage = (lstElements: ElementComponentType[]): void => {
+    getLocalStorage().setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
 }
 
 export const addUpdateLocalStorage = (object: PositionType, row: number, column: number): void => {
     if (!isEmptyLocalStorage()) {
-        const { localStorage }: any = window;
-        const lstElement = [...JSON.parse(localStorage.getItem(KEY_LOCALSTORAGE))];
-        lstElement[column].element.splice(row, 1, object); /*Actualizar entorno de localStorage */
-        localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElement));
+        const localStorage = getLocalStorage();
+        const lstElements: ElementComponentType[] = JSON.parse(localStorage.getItem(KEY_LOCALSTORAGE)!);
 
-    } else console.log('No existe el objeto en localStorage');
+        if (lstElements[column]) {
+            lstElements[column].element[row] = object;
+            localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
+
+        } else LOG.warn('El índice especificado está fuera de los límites del array');
+    } else LOG.warn('No existe el objeto en localStorage');
 }
 
 export const updateLocalStorageObject = (object: PositionType, row: number, column: number): void => {
-    const { localStorage } = window;
+    const localStorage = getLocalStorage();
     const lstElement = localStorage.getItem(KEY_LOCALSTORAGE);
 
     if (lstElement !== null) {
-        let lstElements: ElementComponentType[] = JSON.parse(lstElement);
+        const lstElements: ElementComponentType[] = JSON.parse(lstElement);
 
-        // Crear una copia del objeto que deseas actualizar
-        const updatedElement = {
-            ...lstElements[column].element[row],
-            ...object
-        };
+        if (lstElements[column]) {
+            const updatedElement = {
+                ...lstElements[column].element[row],
+                ...object
+            };
+            lstElements[column].element[row] = updatedElement;
+            localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
 
-        // Actualizar el elemento en lstElements
-        lstElements = lstElements.map((item, idx) => {
-            if (idx === column) {
-                return {
-                    ...item,
-                    element: item.element.map((el, r) => (r === row ? updatedElement : el))
-                };
-            }
-            return item;
-        });
-        localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
+        } else LOG.warn('El índice especificado está fuera de los límites del array');
     }
-};
+}
 
 export const listLocalStorage = (): ElementComponentType[] => {
-    const { localStorage } = window
-    const lstElement = localStorage.getItem(KEY_LOCALSTORAGE);
-    if (lstElement !== null) {
-        return JSON.parse(lstElement);
-    }
-    return [];
+    const lstElement = getLocalStorage().getItem(KEY_LOCALSTORAGE);
+    return lstElement ? JSON.parse(lstElement) : [];
 }
 
 export const objectLocalStorage = (row: number, column: number): PositionType | null => {
-    const { localStorage } = window;
-    const lstElement = localStorage.getItem(KEY_LOCALSTORAGE);
-    if (lstElement !== null) {
+    const lstElement = getLocalStorage().getItem(KEY_LOCALSTORAGE);
+
+    if (lstElement) {
         try {
             const lstElements: ElementComponentType[] = JSON.parse(lstElement);
             if (lstElements[column] && lstElements[column].element[row]) {
                 return lstElements[column].element[row];
             }
         } catch (error) {
-            console.error("Error al parsear los elementos del localStorage", error);
+            LOG.error("Error al parsear los elementos del localStorage", error);
         }
     }
     return null;
-};
+}

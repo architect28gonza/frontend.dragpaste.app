@@ -1,37 +1,33 @@
 export type TaskType = {
-    id: any
-    key: string
-    content: any
-}
+    id: any;
+    key: string;
+    content: any;
+};
 
 export type ColumnType = {
-    id: string
-    title: any
-    tasks: TaskType[]
-}
+    id: string;
+    title: any;
+    tasks: TaskType[];
+};
 
 export type TaskBoardType = {
-    columns: ColumnType[]
-}
+    columns: ColumnType[];
+};
 
 export type PositionType = {
-    previous_row: number
-    previous_column: number
-    final_row: number
-    final_column: number
-    key: string,
-    label: string
-    body: any
-}
+    previous_row: number;
+    previous_column: number;
+    final_row: number;
+    final_column: number;
+    key: string;
+    label: string;
+    body: any;
+};
 
 export type ElementComponentType = {
-    title: string
-    element: PositionType[]
-}
-
-export type InputType = {
-    label: string
-}
+    title: string;
+    element: PositionType[];
+};
 
 export interface PropsIGeneric {
     propsComponent?: {
@@ -42,9 +38,4 @@ export interface PropsIGeneric {
         row: number;
         column: number;
     };
-}
-
-export interface PositionElementI {
-    row: number;
-    column: number;
-}
+};
