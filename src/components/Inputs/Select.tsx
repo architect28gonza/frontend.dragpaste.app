@@ -1,13 +1,13 @@
 import React, { ChangeEvent, JSXElementConstructor, ReactElement, useRef, useState } from 'react';
 import InLabel from './Label';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, Select, Space } from 'antd';
-import { inputStyle } from '../../../public/css/styles';
+import { PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { Avatar, Button, Divider, Input, Select, Space } from 'antd';
+import { buttonRemove, inputStyle } from '../../assets/styles/styles';
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../props';
-import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
-import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
-import { openNotificationWithIcon } from '../../util/Message.alert';
+import { getProps } from '../../util/Props.util';
+import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
+import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { openNotificationWithIcon } from '../../util/Message.util';
 import type { InputRef } from 'antd';
 
 const InSelect: React.FC<PropsIGeneric> = ({ propsComponent }) => {
@@ -111,6 +111,13 @@ const InSelect: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 dropdownRender={(menu) => getDropdownRender(menu)}
                 options={items.map((item, index) => ({ label: item, value: index }))}
             />
+            <Space size={16} wrap>
+                <Avatar style={buttonRemove} 
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle" 
+                    size="small" 
+                    icon={<UnorderedListOutlined />} />
+            </Space>
         </div>
     );
 };

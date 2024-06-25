@@ -3,7 +3,7 @@ import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType, ElementComponentType, PositionType } from '../types/types.export';
 import { lstElements } from '../assets';
-import { addLocalStorage, addUpdateLocalStorage, isEmptyLocalStorage, listLocalStorage } from '../local.storage';
+import { addLocalStorage, addUpdateLocalStorage, isEmptyLocalStorage, listLocalStorage } from '../util/LocalStorage.util';
 
 
 // Types for Drag and Drop

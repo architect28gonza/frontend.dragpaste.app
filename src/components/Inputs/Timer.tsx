@@ -1,15 +1,16 @@
 import React, { ChangeEvent, useState } from 'react';
-import { TimePicker, TimePickerProps } from 'antd';
+import { Avatar, Space, TimePicker, TimePickerProps } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { inputStyle } from '../../../public/css/styles';
+import { buttonRemove, inputStyle } from '../../assets/styles/styles';
 import InLabel from './Label';
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../props';
+import { getProps } from '../../util/Props.util';
 
-import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
-import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
-import { openNotificationWithIcon } from '../../util/Message.alert';
+import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
+import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { openNotificationWithIcon } from '../../util/Message.util';
+import { UnorderedListOutlined } from '@ant-design/icons';
 
 dayjs.extend(customParseFormat);
 
@@ -50,6 +51,13 @@ const InTimer: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 value={dayjs(value, 'HH:mm:ss')}
                 placeholder='HH:mm:ss'
                 defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+            <Space size={16} wrap>
+                <Avatar style={buttonRemove}
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle"
+                    size="small"
+                    icon={<UnorderedListOutlined />} />
+            </Space>
         </div>
 
     )

@@ -1,12 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Radio, RadioChangeEvent } from 'antd';
+import { Avatar, Radio, RadioChangeEvent, Space } from 'antd';
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../props';
-import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
-import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
+import { getProps } from '../../util/Props.util';
+import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
+import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
 
 import InLabel from './Label';
-import { openNotificationWithIcon } from '../../util/Message.alert';
+import { openNotificationWithIcon } from '../../util/Message.util';
+import { buttonRemove } from '../../assets/styles/styles';
+import { UnorderedListOutlined } from '@ant-design/icons';
 
 const InRadio: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
@@ -45,6 +47,13 @@ const InRadio: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 <Radio value={true}>SI</Radio>
                 <Radio value={false}>NO</Radio>
             </Radio.Group>
+            <Space size={16} wrap>
+                <Avatar style={buttonRemove} 
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle" 
+                    size="small" 
+                    icon={<UnorderedListOutlined />} />
+            </Space>
         </div>
     )
 }

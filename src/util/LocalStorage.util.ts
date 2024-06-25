@@ -1,5 +1,5 @@
 
-import { ElementComponentType, PositionType } from "./types/types.export";
+import { ElementComponentType, PositionType } from "../types/types.export";
 
 export const KEY_LOCALSTORAGE = 'elementsForm';
 

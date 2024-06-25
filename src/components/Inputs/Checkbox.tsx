@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
 import InLabel from './Label';
 
-import { Button, Checkbox } from 'antd';
+import { Avatar, Button, Checkbox, Space } from 'antd';
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../props';
-import { labelTextStyle } from '../../../public/css/styles';
-import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
-import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
-import { openNotificationWithIcon } from '../../util/Message.alert'
+import { getProps } from '../../util/Props.util';
+import { buttonRemove, labelTextStyle } from '../../assets/styles/styles';
+import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
+import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { openNotificationWithIcon } from '../../util/Message.util'
+import { UnorderedListOutlined } from '@ant-design/icons';
 
 interface CheckboxItem {
 	position: number;
@@ -47,7 +48,7 @@ const InCheckbox: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
 	};
 
-	const onChange = (item: CheckboxItem) => {
+	const onChangeCheckbox = (item: CheckboxItem) => {
 		if (!event) {
 			console.error("Evento esta indefinido");
 			return;
@@ -76,7 +77,7 @@ const InCheckbox: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 				<Checkbox
 					key={item.position}
 					defaultChecked={item.isCheck}
-					onChange={() => onChange(item)}>
+					onChange={() => onChangeCheckbox(item)}>
 					<input
 						key={item.position}
 						placeholder='escribir item'
@@ -94,6 +95,13 @@ const InCheckbox: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 				style={{ padding: 3 }}>
 				+
 			</Button>
+			<Space size={16} wrap>
+                <Avatar style={buttonRemove} 
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle" 
+                    size="small" 
+                    icon={<UnorderedListOutlined />} />
+            </Space>
 		</div>
 	);
 };

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import dayjs from 'dayjs';
-import { DatePicker, DatePickerProps } from "antd";
+import { Avatar, DatePicker, DatePickerProps, Space } from "antd";
 import { PropsIGeneric } from "../../types/types.export";
-import { getProps } from "../../props";
-import { getColumnRowFromEvent, isValidColumn } from "../../position.element";
-import { objectLocalStorage, updateLocalStorageObject } from "../../local.storage";
-import { openNotificationWithIcon } from "../../util/Message.alert";
+import { getProps } from "../../util/Props.util";
+import { getColumnRowFromEvent, isValidColumn } from "../../util/Position.util";
+import { objectLocalStorage, updateLocalStorageObject } from "../../util/LocalStorage.util";
+import { openNotificationWithIcon } from "../../util/Message.util";
 import InLabel from "./Label";
-import { inputStyle } from "../../../public/css/styles";
+import { buttonRemove, inputStyle } from "../../assets/styles/styles";
+import { UnorderedListOutlined } from '@ant-design/icons';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -52,6 +53,13 @@ const InInputDate: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 style={inputStyle}
                 placeholder="AÑO-MES-DIA"
             />
+            <Space size={16} wrap>
+                <Avatar style={buttonRemove} 
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle" 
+                    size="small" 
+                    icon={<UnorderedListOutlined />} />
+            </Space>
         </div>
     );
 };

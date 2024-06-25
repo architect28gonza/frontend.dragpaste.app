@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Input } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, UnorderedListOutlined } from '@ant-design/icons';
+import { Avatar, Input, Space } from 'antd';
 import InLabel from './Label';
 
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../props';
-import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
-import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
-import { openNotificationWithIcon } from '../../util/Message.alert';
+import { getProps } from '../../util/Props.util';
+import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
+import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { openNotificationWithIcon } from '../../util/Message.util';
+import { buttonRemove } from '../../assets/styles/styles';
 
 const InPassword: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
@@ -47,10 +48,17 @@ const InPassword: React.FC<PropsIGeneric> = ({ propsComponent }) => {
             <Input.Password
                 value={value}
                 onChange={handlePasswordChange}
-                style={{ marginTop: 5, width: '95%' }}
+                style={{ marginTop: 5, width: '90%' }}
                 placeholder="*************"
                 iconRender={(visible) => showEye(visible)}
             />
+            <Space size={16} wrap>
+                <Avatar style={buttonRemove}
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle"
+                    size="small"
+                    icon={<UnorderedListOutlined />} />
+            </Space>
         </div>
     );
 };

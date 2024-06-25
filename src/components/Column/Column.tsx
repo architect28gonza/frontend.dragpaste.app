@@ -18,7 +18,6 @@ import {
 } from './Column.styled'
 import { ColumnType } from '../../types/types.export'
 
-
 type Props = {
    column: ColumnType
    columnIndex: number

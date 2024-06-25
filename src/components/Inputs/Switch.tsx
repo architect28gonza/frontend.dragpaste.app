@@ -1,12 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Space, Switch } from 'antd';
-import { getProps } from '../../props';
+import { Avatar, Space, Switch } from 'antd';
+import { getProps } from '../../util/Props.util';
 import { PropsIGeneric } from '../../types/types.export';
-import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
+import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
 import InLabel from './Label';
 
-import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
-import { openNotificationWithIcon } from '../../util/Message.alert';
+import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { openNotificationWithIcon } from '../../util/Message.util';
+import { buttonRemove } from '../../assets/styles/styles';
+import { UnorderedListOutlined } from '@ant-design/icons';
 
 const InSwitch: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
@@ -46,6 +48,13 @@ const InSwitch: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                     onChange={onChangeSwitch}
                     checkedChildren="activo"
                     unCheckedChildren="desactivo" defaultChecked />
+            </Space>
+            <Space size={16} wrap>
+                <Avatar style={buttonRemove}
+                    onClick={() => alert("asdadasdasdasd")}
+                    shape="circle"
+                    size="small"
+                    icon={<UnorderedListOutlined />} />
             </Space>
         </div>
     )

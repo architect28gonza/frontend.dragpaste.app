@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
-import { labelTextStyle } from "../../../public/css/styles";
-import { objectLocalStorage, updateLocalStorageObject } from "../../local.storage";
-import { getColumnRowFromEvent, isValidColumn } from "../../position.element";
+import { labelTextStyle } from "../../assets/styles/styles";
+import { objectLocalStorage, updateLocalStorageObject } from "../../util/LocalStorage.util";
+import { getColumnRowFromEvent, isValidColumn } from "../../util/Position.util";
 
 interface InLabelProps {
     text: string;
