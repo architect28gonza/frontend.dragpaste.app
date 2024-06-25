@@ -42,38 +42,47 @@ const App: React.FC = () => {
    };
 
    const setUpdateElementView = (elements: ElementComponentType[]) => {
-      setColumnsElement(prevColumns => {
+      const updateColumns = (prevColumns: ColumnType[]) => {
          const updatedColumns = [...prevColumns];
+         elements.forEach(item => updateColumnsForItem(item, updatedColumns));
+         return updatedColumns;
+      };
 
-         elements.forEach(item => {
-            const filas = item.element;
-            if (filas.length !== 0) {
-               filas.forEach(elementItem => {
-                  if (elementItem !== null) {
-                     const { final_column, final_row, key, label, body } = elementItem;
-                     updatedColumns[0].tasks.forEach(element => {
-                        if (key === element.key) {
-                           const propsComponent = {
-                              label: { value: label },
-                              body: { value: body },
-                              row: final_row,
-                              column: final_column
-                           };
-                           const updatedElement = {
-                              ...element,
-                              id: v4(),
-                              content: (props: any) => element.content({ ...props, propsComponent })
-                           };
-                           updatedColumns[final_column].tasks.splice(final_row, 0, updatedElement);
-                        }
-                     });
-                  }
-               });
+      const updateColumnsForItem = (item: ElementComponentType, updatedColumns: ColumnType[]) => {
+         const filas = item.element;
+         if (filas.length !== 0) {
+            filas.forEach(elementItem => {
+               if (elementItem !== null) {
+                  updateColumnTasks(elementItem, updatedColumns);
+               }
+            });
+         }
+      };
+
+      const updatedContent = (props: any, propsComponent: any, element: any) => element.content({ ...props, propsComponent });
+
+      const updateColumnTasks = (elementItem: any, updatedColumns: ColumnType[]) => {
+         const { final_column, final_row, key, label, body } = elementItem;
+         updatedColumns[0].tasks.forEach(element => {
+            if (key === element.key) {
+               const propsComponent = {
+                  label: { value: label },
+                  body: { value: body },
+                  row: final_row,
+                  column: final_column
+               };
+               const updatedElement = {
+                  ...element,
+                  id: v4(),
+                  content: (props:any) => updatedContent(props, propsComponent, element) 
+               };
+               updatedColumns[final_column].tasks.splice(final_row, 0, updatedElement);
             }
          });
-         return updatedColumns;
-      });
+      };
+      setColumnsElement(prevColumns => updateColumns(prevColumns));
    };
+
 
    return (
       <Layout>

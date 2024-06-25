@@ -1,0 +1,7 @@
+Analyze "frontene.form.app": sqp_bb54260dddaa9fd6fb128ddb8035477477e1de7d
+
+sonar-scanner \
+  -Dsonar.projectKey=frontene.form.app \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=sqp_bb54260dddaa9fd6fb128ddb8035477477e1de7d

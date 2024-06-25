@@ -1,4 +1,4 @@
-import LOG from 'loglevel';
+
 import { ElementComponentType, PositionType } from "./types/types.export";
 
 export const KEY_LOCALSTORAGE = 'elementsForm';
@@ -22,8 +22,8 @@ export const addUpdateLocalStorage = (object: PositionType, row: number, column:
             lstElements[column].element[row] = object;
             localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
 
-        } else LOG.warn('El índice especificado está fuera de los límites del array');
-    } else LOG.warn('No existe el objeto en localStorage');
+        } else console.error('El índice especificado está fuera de los límites del array');
+    } else console.error('No existe el objeto en localStorage');
 }
 
 export const updateLocalStorageObject = (object: PositionType, row: number, column: number): void => {
@@ -41,7 +41,7 @@ export const updateLocalStorageObject = (object: PositionType, row: number, colu
             lstElements[column].element[row] = updatedElement;
             localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
 
-        } else LOG.warn('El índice especificado está fuera de los límites del array');
+        } else console.error('El índice especificado está fuera de los límites del array');
     }
 }
 
@@ -56,11 +56,11 @@ export const objectLocalStorage = (row: number, column: number): PositionType | 
     if (lstElement) {
         try {
             const lstElements: ElementComponentType[] = JSON.parse(lstElement);
-            if (lstElements[column] && lstElements[column].element[row]) {
+            if (lstElements[column]?.element[row]){
                 return lstElements[column].element[row];
             }
         } catch (error) {
-            LOG.error("Error al parsear los elementos del localStorage", error);
+            console.error("Error al parsear los elementos del localStorage", error);
         }
     }
     return null;

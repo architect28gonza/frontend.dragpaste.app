@@ -2,35 +2,31 @@ import React, { ChangeEvent, useState } from 'react';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Input } from 'antd';
 import InLabel from './Label';
-import LOG from 'loglevel';
+
 import { PropsIGeneric } from '../../types/types.export';
 import { getProps } from '../../props';
 import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
 import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
+import { openNotificationWithIcon } from '../../util/Message.alert';
 
 const InPassword: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
     const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
     const [value, setValue] = useState<string>(body);
-    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement> | any>(undefined);
+    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
 
-    /**
-     * Maneja el cambio de entrada en un campo de texto.
-     * 
-     * @param {ChangeEvent<HTMLInputElement>} e - Evento de cambio que contiene el nuevo valor del campo de entrada.
-     */
     const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
 
-        if ((event === undefined) && (!isPositionNegative())) {
-            LOG.error('El evento está vacío o la posición es negativa - Password')
+        if ((!event) || (event === undefined) && (!isPositionNegative())) {
+            openNotificationWithIcon();
             return;
         }
 
-        let indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
-        let indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
+        const indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
+        const indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
 
         if (!isValidColumn(indexColumn)) {
-            LOG.error("La columna no es válida - Password");
+            console.error("La columna no es válida - Password");
             return;
         }
 
@@ -40,8 +36,10 @@ const InPassword: React.FC<PropsIGeneric> = ({ propsComponent }) => {
             object.body = newValue;
             updateLocalStorageObject(object, indexRow, indexColumn);
             setValue(newValue);
-        } else LOG.error("Error: No se pudo obtener el objeto de la lista - Password");
+        } else openNotificationWithIcon();
     };
+
+    const showEye = (visible: boolean) => visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
 
     return (
         <div className='container-in-password'>
@@ -49,9 +47,9 @@ const InPassword: React.FC<PropsIGeneric> = ({ propsComponent }) => {
             <Input.Password
                 value={value}
                 onChange={handlePasswordChange}
-                style={{ marginTop: 5 }}
+                style={{ marginTop: 5, width: '95%' }}
                 placeholder="*************"
-                iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                iconRender={(visible) => showEye(visible)}
             />
         </div>
     );

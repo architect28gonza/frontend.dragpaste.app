@@ -6,9 +6,10 @@ import { inputStyle } from '../../../public/css/styles';
 import InLabel from './Label';
 import { PropsIGeneric } from '../../types/types.export';
 import { getProps } from '../../props';
-import LOG from 'loglevel';
+
 import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
 import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
+import { openNotificationWithIcon } from '../../util/Message.alert';
 
 dayjs.extend(customParseFormat);
 
@@ -16,19 +17,19 @@ const InTimer: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
     const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
     const [value, setValue] = useState<any>(body);
-    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement> | any>(undefined);
+    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
 
     const onChangeTimer: TimePickerProps['onChange'] = (_, timeString) => {
-        if ((event === undefined) && (!isPositionNegative())) {
-            LOG.error('El evento está vacío o la posición es negativa - Date')
+        if ((!event) || (event === undefined) && (!isPositionNegative())) {
+            openNotificationWithIcon();
             return;
         }
 
-        let indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
-        let indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
+        const indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
+        const indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
 
         if (!isValidColumn(indexColumn)) {
-            LOG.error("La columna no es válida - Date");
+            console.error("La columna no es válida - Date");
             return;
         }
 
@@ -38,7 +39,7 @@ const InTimer: React.FC<PropsIGeneric> = ({ propsComponent }) => {
             object.body = newValue;
             updateLocalStorageObject(object, indexRow, indexColumn);
             setValue(newValue);
-        } else LOG.error("Error: No se pudo obtener el objeto de la lista - Date");
+        } else openNotificationWithIcon();
     };
 
     return (

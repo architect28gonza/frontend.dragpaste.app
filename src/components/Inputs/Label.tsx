@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from "react";
 import { labelTextStyle } from "../../../public/css/styles";
 import { objectLocalStorage, updateLocalStorageObject } from "../../local.storage";
 import { getColumnRowFromEvent, isValidColumn } from "../../position.element";
-import LOG from 'loglevel';
 
 interface InLabelProps {
     text: string;
@@ -21,7 +20,7 @@ const InLabel: React.FC<InLabelProps> = ({ text, setEvent }) => {
 
         const objectElement = objectLocalStorage(row, column);
         if (!objectElement) {
-            LOG.error("Error label: No se pudo obtener el objeto de la lista.");
+            console.error("Error label: No se pudo obtener el objeto de la lista.");
             return;
         }
 

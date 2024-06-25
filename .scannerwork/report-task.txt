@@ -1,0 +1,6 @@
+projectKey=frontene.form.app
+serverUrl=http://localhost:9000
+serverVersion=10.5.1.90531
+dashboardUrl=http://localhost:9000/dashboard?id=frontene.form.app
+ceTaskId=907165e0-6ac5-4950-9bcb-372e38bc3e12
+ceTaskUrl=http://localhost:9000/api/ce/task?id=907165e0-6ac5-4950-9bcb-372e38bc3e12

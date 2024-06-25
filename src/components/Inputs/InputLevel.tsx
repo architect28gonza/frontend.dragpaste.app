@@ -1,26 +1,57 @@
-import React from 'react';
-import { Flex, Input } from 'antd';
-import type { GetProp } from 'antd';
-import type { OTPProps } from 'antd/es/input/OTP';
+import React, { ChangeEvent, useState } from 'react';
 import InLabel from './Label';
 
-const InputLevel: React.FC = () => {
-	const onChange: GetProp<typeof Input.OTP, 'onChange'> = (text) => {
-		console.log('onChange:', text);
-	};
+import { Flex, Input } from 'antd';
+import { PropsIGeneric } from '../../types/types.export';
+import type { GetProp } from 'antd';
+import type { OTPProps } from 'antd/es/input/OTP';
+import { getProps } from '../../props';
+import { objectLocalStorage, updateLocalStorageObject } from '../../local.storage';
+import { getColumnRowFromEvent, isValidColumn } from '../../position.element';
+import { openNotificationWithIcon } from '../../util/Message.alert';
+const { OTP: Otp } = Input
 
-	const sharedProps: OTPProps = {
-		onChange,
-	};
+const InputLevel: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
-	return (
-		<div className='container-in-input-otp'>
-			<InLabel />
-			<Flex gap="middle" align="flex-start" style={{ marginTop: 5 }} vertical>
-				<Input.OTP formatter={(str) => str.toUpperCase()} {...sharedProps} />
-			</Flex>
-		</div>
-	);
+    const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
+    const [value, setValue] = useState<string>(body);
+    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
+
+    const onChange: GetProp<typeof Otp, 'onChange'> = (text) => {
+        if ((!event) || (event === undefined) && (!isPositionNegative())) {
+            openNotificationWithIcon();
+            return;
+        }
+
+        const indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
+        const indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
+
+        if (!isValidColumn(indexColumn)) {
+            console.error("La columna no es válida - Input");
+            return;
+        }
+
+        const object = objectLocalStorage(indexRow, indexColumn);
+        if (object) {
+            const newValue = text;
+            object.body = newValue;
+            updateLocalStorageObject(object, indexRow, indexColumn);
+            setValue(newValue);
+        } else openNotificationWithIcon();
+    };
+
+    const sharedProps: OTPProps = {
+        onChange,
+    };
+
+    return (
+        <div className='container-in-input-otp'>
+            <InLabel setEvent={setEvent} text={label} />
+            <Flex gap="middle" align="flex-start" style={{ marginTop: 5 }} vertical>
+                <Otp value={value} formatter={(str) => str.toUpperCase()} {...sharedProps} />
+            </Flex>
+        </div>
+    );
 };
 
 export default InputLevel;

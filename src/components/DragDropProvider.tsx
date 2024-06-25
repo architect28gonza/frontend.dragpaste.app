@@ -1,10 +1,10 @@
-import { useContext, useState, createContext, Dispatch, SetStateAction, FC, ReactNode } from 'react';
+import { useContext, useState, createContext, Dispatch, SetStateAction, FC, ReactNode, useMemo } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType, ElementComponentType, PositionType } from '../types/types.export';
 import { lstElements } from '../assets';
 import { addLocalStorage, addUpdateLocalStorage, isEmptyLocalStorage, listLocalStorage } from '../local.storage';
-import LOG from 'loglevel';
+
 
 // Types for Drag and Drop
 type DragDropProps = (source: DraggableLocation, destination: DraggableLocation) => void;
@@ -59,6 +59,7 @@ const getStyle = (
     }, 0);
 
 const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ children, data }) => {
+
     const [columns, setColumns] = useState<ColumnType[]>(data);
     const [lstElementsComponent, setLstElementsComponent] = useState<ElementComponentType[]>((!isEmptyLocalStorage()) ? listLocalStorage() : lstElements);
     const [colDropshadowProps, setColDropshadowProps] = useState<ColDropshadow>({
@@ -137,7 +138,7 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
             const previous_row = objectElement.previous_row;
 
             const contentElement = lstTemp.find(({ id }) => id === destination.droppableId)
-            const nameElement: string | any = contentElement?.tasks[final_row].key;
+            const nameElement: any = contentElement?.tasks[final_row].key;
             objectElement.key = nameElement;
             updated[final_column].element.splice(final_row, 0, objectElement)
 
@@ -170,7 +171,7 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
     const handleDropshadowRow: RowDropshadowProps = (event, destinationIndex, sourceIndex) => {
         const draggedElement = getDraggedElement(event.draggableId);
         if (!draggedElement) return;
-        const { clientHeight } = draggedElement as Element;
+        const { clientHeight } = draggedElement;
         const updatedChildrenArray = getUpdatedChildrenArray(draggedElement, destinationIndex, sourceIndex);
         const marginTop = getStyle(updatedChildrenArray, destinationIndex, 'marginBottom', 'clientHeight');
         setRowDropshadowProps({
@@ -243,7 +244,7 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
                     updated[positionColumnFinal].element[final_row].previous_row = previous_row;
                     localStorageInsert(updated, final_row, positionColumnFinal);
 
-                } else LOG.warn(`Posicion no encontrada : Columna: ${positionColumnFinal} - Fila : ${final_row}`);
+                }
             }
             return updated;
         })
@@ -277,21 +278,32 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
         ]);
     };
 
+    const contextValue = useMemo(() => ({
+        handleNewColumn,
+        handleRemoveTask,
+        handleDeleteColumn,
+        handleDragEnd,
+        handleDragStart,
+        handleDragUpdate,
+        rowDropshadowProps,
+        colDropshadowProps,
+        columns,
+        setColumns,
+    }), [
+        handleNewColumn,
+        handleRemoveTask,
+        handleDeleteColumn,
+        handleDragEnd,
+        handleDragStart,
+        handleDragUpdate,
+        rowDropshadowProps,
+        colDropshadowProps,
+        columns,
+        setColumns,
+    ]);
+
     return (
-        <DragDropContext.Provider
-            value={{
-                handleNewColumn,
-                handleRemoveTask,
-                handleDeleteColumn,
-                handleDragEnd,
-                handleDragStart,
-                handleDragUpdate,
-                rowDropshadowProps,
-                colDropshadowProps,
-                columns,
-                setColumns,
-            }}
-        >
+        <DragDropContext.Provider value={contextValue}>
             {children}
         </DragDropContext.Provider>
     );

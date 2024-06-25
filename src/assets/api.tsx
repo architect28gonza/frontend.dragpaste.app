@@ -12,7 +12,6 @@ import InUploadOut from '../components/Inputs/Upload'
 import InTextArea from '../components/Inputs/TextArea'
 import InCheckbox from '../components/Inputs/Checkbox'
 import InRadio from '../components/Inputs/Radio'
-import InLabel from '../components/Inputs/Label'
 import InSwitch from '../components/Inputs/Switch'
 
 export const api: TaskBoardType = {
@@ -32,7 +31,6 @@ export const api: TaskBoardType = {
             { id: v4(), key: 'input:textarea', content: (props: any) => <InTextArea {...props} /> },
             { id: v4(), key: 'input:checkbox', content: (props: any) => <InCheckbox {...props} /> },
             { id: v4(), key: 'input:radio', content: (props: any) => <InRadio {...props} /> },
-            { id: v4(), key: 'input:label', content: (props: any) => <InLabel {...props} /> },
             { id: v4(), key: 'input:switch', content: (props: any) => <InSwitch {...props} /> }
          ],
       },
