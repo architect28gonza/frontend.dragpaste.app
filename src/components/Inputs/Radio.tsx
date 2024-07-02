@@ -1,43 +1,18 @@
-import React, { ChangeEvent, useState } from 'react';
+import { FC } from 'react';
 import { Avatar, Radio, RadioChangeEvent, Space } from 'antd';
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../util/Props.util';
-import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
-import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
 
 import InLabel from './Label';
-import { openNotificationWithIcon } from '../../util/Message.util';
 import { buttonRemove } from '../../assets/styles/styles';
-import { UnorderedListOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
+import useEventHandling from '../../hooks/useEventHandling';
+import { deleteFromLocalStorage } from '../../util/LocalStorage.util';
 
-const InRadio: React.FC<PropsIGeneric> = ({ propsComponent }) => {
+const InRadio: FC<PropsIGeneric> = ({ propsComponent }) => {
 
-    const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
-    const [value, setValue] = useState<boolean>((typeof body !== 'string') ? body : false);
-    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
+    const { handleEventChange, setEvent, label, value, position } = useEventHandling(propsComponent);
 
-    const onChangeRadio = (e: RadioChangeEvent) => {
-        if ((!event) || (event === undefined) && (!isPositionNegative())) {
-            openNotificationWithIcon();
-            return;
-        }
-
-        const indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
-        const indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
-
-        if (!isValidColumn(indexColumn)) {
-            console.error("La columna no es válida - Switch");
-            return;
-        }
-
-        const object = objectLocalStorage(indexRow, indexColumn);
-        if (object) {
-            const newValue: any = e.target.value;
-            object.body = newValue;
-            updateLocalStorageObject(object, indexRow, indexColumn);
-            setValue(newValue);
-        } else openNotificationWithIcon();
-    };
+    const onChangeRadio = (e: RadioChangeEvent) => handleEventChange(e.target.value);
 
     return (
 
@@ -48,11 +23,11 @@ const InRadio: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 <Radio value={false}>NO</Radio>
             </Radio.Group>
             <Space size={16} wrap>
-                <Avatar style={buttonRemove} 
-                    onClick={() => alert("asdadasdasdasd")}
-                    shape="circle" 
-                    size="small" 
-                    icon={<UnorderedListOutlined />} />
+                <Avatar style={buttonRemove}
+                    onClick={() => deleteFromLocalStorage(position)}
+                    shape="circle"
+                    size="small"
+                    icon={<DeleteOutlined />} />
             </Space>
         </div>
     )

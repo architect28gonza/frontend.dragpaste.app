@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react'
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import { TaskType } from '../../types/types.export'
@@ -17,7 +17,7 @@ type Props = {
    index: number
 }
 
-const Row: React.FC<Props> = ({ task, index }) => (
+const Row: FC<Props> = ({ task, index }) => (
    <Draggable draggableId={task.id} index={index}>
       {(provided: DraggableProvided) => (
          <Container

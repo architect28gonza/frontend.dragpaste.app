@@ -1,10 +1,9 @@
-import { useContext, useState, createContext, Dispatch, SetStateAction, FC, ReactNode, useMemo } from 'react';
+import { useContext, useState, createContext, Dispatch, SetStateAction, FC, ReactNode, useMemo, useEffect } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType, ElementComponentType, PositionType } from '../types/types.export';
 import { lstElements } from '../assets';
 import { addLocalStorage, addUpdateLocalStorage, isEmptyLocalStorage, listLocalStorage } from '../util/LocalStorage.util';
-
 
 // Types for Drag and Drop
 type DragDropProps = (source: DraggableLocation, destination: DraggableLocation) => void;
@@ -70,6 +69,19 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
         marginTop: 0,
         height: 0,
     });
+
+    useEffect(() => {
+        const handleStorageChange = (event: CustomEvent) => {
+            const { key, value } = event.detail;
+            alert(`Se ha insertado ${key} en el localStorage con el valor: ${value}`);
+        };
+
+        window.addEventListener('localStorageModified', handleStorageChange as EventListener);
+
+        return () => {
+            window.removeEventListener('localStorageModified', handleStorageChange as EventListener);
+        };
+    }, []);
 
     const moveRowSameColumn: DragDropProps = (source, destination) => {
         setColumns((prev) => {
@@ -243,7 +255,6 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
                     updated[positionColumnFinal].element[final_row].final_row = final_row;
                     updated[positionColumnFinal].element[final_row].previous_row = previous_row;
                     localStorageInsert(updated, final_row, positionColumnFinal);
-
                 }
             }
             return updated;
@@ -255,7 +266,6 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
             addLocalStorage(updated);
         } else {
             addUpdateLocalStorage(updated[final_column].element[final_row], final_row, final_column)
-
         }
     }
 
@@ -302,11 +312,9 @@ const DragDropProvider: FC<{ children: ReactNode; data: ColumnType[] }> = ({ chi
         setColumns,
     ]);
 
-    return (
-        <DragDropContext.Provider value={contextValue}>
-            {children}
-        </DragDropContext.Provider>
-    );
+    return <DragDropContext.Provider value={contextValue}>
+        {children}
+    </DragDropContext.Provider>
 };
 
 export const useDragDrop = () => {

@@ -13,11 +13,11 @@ const Board: React.FC = () => {
 
    const dividerElement = () => {
       return <Divider type='horizontal' orientation='left' >
-         <b style={{ fontSize: 14 }}>CREE SU FORMULARIO</b>
+         <b style={{ fontSize: 14 }}>CREAR FORMULARIO</b>
       </Divider>
    }
 
-   const firshColumnGrid = (columnContent: ColumnType, columnIndex: number) => <Col className="gutter-row" span={columnIndex === 0 ? 24 : 6}>
+   const firstColumnGrid = (columnContent: ColumnType, columnIndex: number) => <Col className="gutter-row" span={columnIndex === 0 ? 24 : 6}>
       <Column key={columnContent.id} column={columnContent} columnIndex={columnIndex} />
       {columnIndex === 0 ? dividerElement() : null}
    </Col>
@@ -32,7 +32,7 @@ const Board: React.FC = () => {
          <Droppable droppableId="all-columns" direction="horizontal" type="column">
             {(provided, snapshot) => (
                <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 10 }}>
-                  {columns.map((columnContent, columnIndex) => firshColumnGrid(columnContent, columnIndex))}
+                  {columns.map((columnContent, columnIndex) => firstColumnGrid(columnContent, columnIndex))}
                   {provided.placeholder}
                   {snapshot.isDraggingOver && (
                      <ColumnDropshadow

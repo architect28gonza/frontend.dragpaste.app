@@ -1,7 +1,8 @@
 
-import { ElementComponentType, PositionType } from "../types/types.export";
+import { ElementComponentType, IColumnRow, PositionType } from "../types/types.export";
 
-export const KEY_LOCALSTORAGE = 'elementsForm';
+export const KEY_LOCALSTORAGE: string = 'elementsForm';
+export const KEY_POSITION: string = 'position'
 
 const getLocalStorage = (): Storage => window.localStorage;
 
@@ -56,7 +57,7 @@ export const objectLocalStorage = (row: number, column: number): PositionType | 
     if (lstElement) {
         try {
             const lstElements: ElementComponentType[] = JSON.parse(lstElement);
-            if (lstElements[column]?.element[row]){
+            if (lstElements[column]?.element[row]) {
                 return lstElements[column].element[row];
             }
         } catch (error) {
@@ -64,4 +65,51 @@ export const objectLocalStorage = (row: number, column: number): PositionType | 
         }
     }
     return null;
+}
+
+
+// localStorageUtils.js
+const setItemWithEvent = (key: any, value: any) => {
+    localStorage.setItem(key, value);
+    const event = new CustomEvent('localStorageModified', {
+        detail: {
+            key,
+            value
+        }
+    });
+    window.dispatchEvent(event);
+};
+
+
+export const deleteFromLocalStorage = ({ row, column }: IColumnRow): void => {
+    if (isEmptyLocalStorage()) {
+        console.error('No existe el objeto en localStorage');
+        return;
+    }
+
+    const localStorage = getLocalStorage();
+    const lstElements: ElementComponentType[] = JSON.parse(localStorage.getItem(KEY_LOCALSTORAGE)!);
+
+    if (!lstElements[column]) {
+        console.error('El índice de columna especificado está fuera de los límites del array');
+        return;
+    }
+
+    if (!lstElements[column].element[row]) {
+        console.error('El índice de fila especificado está fuera de los límites del array');
+        return;
+    }
+
+    // Elimina el elemento en la fila especificada
+    lstElements[column].element.splice(row, 1);
+
+    // Elimina la columna si ya no tiene elementos
+    if (lstElements[column].element.length === 0) {
+        lstElements.splice(column, 1);
+    }
+
+    localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(lstElements));
+    // localStorage.setItem(KEY_POSITION, JSON.stringify({ row, column }));
+    setItemWithEvent(KEY_POSITION, JSON.stringify({ row, column }))
+    console.log('Elemento eliminado correctamente');
 }

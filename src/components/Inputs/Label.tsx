@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, FC } from "react";
 import { labelTextStyle } from "../../assets/styles/styles";
 import { objectLocalStorage, updateLocalStorageObject } from "../../util/LocalStorage.util";
 import { getColumnRowFromEvent, isValidColumn } from "../../util/Position.util";
@@ -8,7 +8,7 @@ interface InLabelProps {
     setEvent: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InLabel: React.FC<InLabelProps> = ({ text, setEvent }) => {
+const InLabel: FC<InLabelProps> = ({ text, setEvent }) => {
 
     const defaultLabelText = "Texto label";
     const [label, setLabel] = useState<string>(text || defaultLabelText);

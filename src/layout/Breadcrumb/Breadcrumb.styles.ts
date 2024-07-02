@@ -1,1 +1,1 @@
-export const BreadcrumbLayoutCss = { margin: '16px 0' };
+export const BreadcrumbLayoutCss = { margin: '10px 0' };

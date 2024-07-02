@@ -1,11 +1,7 @@
 import { ChangeEvent } from "react";
+import { IColumnRow } from "../types/types.export";
 
-interface ColumnRow {
-    column: number;
-    row: number;
-}
-
-export const getColumnRowFromEvent = (event: ChangeEvent<HTMLInputElement>): ColumnRow => {
+export const getColumnRowFromEvent = (event: ChangeEvent<HTMLInputElement>): IColumnRow => {
     let column = -1;
     let row = -1;    
     if (event) {

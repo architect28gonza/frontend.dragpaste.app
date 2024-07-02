@@ -1,9 +1,8 @@
-import React from 'react';
-import { UploadOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { FC } from 'react';
+import { UploadOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
-import { Avatar, Button, message, Space, Upload } from 'antd';
+import { Button, message, Upload } from 'antd';
 import InLabel from './Label';
-import { buttonRemove } from '../../assets/styles/styles';
 
 const props: UploadProps = {
     name: 'file',
@@ -23,7 +22,7 @@ const props: UploadProps = {
     },
 };
 
-const InUploadOut: React.FC = () => {
+const InUploadOut: FC = () => {
     return (
         <div className='container-in-upload'>
             <InLabel />

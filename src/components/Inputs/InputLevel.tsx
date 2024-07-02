@@ -1,44 +1,17 @@
-import React, { ChangeEvent, useState } from 'react';
+import { FC } from 'react';
 import InLabel from './Label';
 
 import { Flex, Input } from 'antd';
 import { PropsIGeneric } from '../../types/types.export';
 import type { GetProp } from 'antd';
 import type { OTPProps } from 'antd/es/input/OTP';
-import { getProps } from '../../util/Props.util';
-import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
-import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
-import { openNotificationWithIcon } from '../../util/Message.util';
+import useEventHandling from '../../hooks/useEventHandling';
 const { OTP: Otp } = Input
 
-const InputLevel: React.FC<PropsIGeneric> = ({ propsComponent }) => {
+const InputLevel: FC<PropsIGeneric> = ({ propsComponent }) => {
 
-    const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
-    const [value, setValue] = useState<string>(body);
-    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
-
-    const onChange: GetProp<typeof Otp, 'onChange'> = (text) => {
-        if ((!event) || (event === undefined) && (!isPositionNegative())) {
-            openNotificationWithIcon();
-            return;
-        }
-
-        const indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
-        const indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
-
-        if (!isValidColumn(indexColumn)) {
-            console.error("La columna no es válida - Input");
-            return;
-        }
-
-        const object = objectLocalStorage(indexRow, indexColumn);
-        if (object) {
-            const newValue = text;
-            object.body = newValue;
-            updateLocalStorageObject(object, indexRow, indexColumn);
-            setValue(newValue);
-        } else openNotificationWithIcon();
-    };
+    const { handleEventChange, setEvent, label, value } = useEventHandling(propsComponent);
+    const onChange: GetProp<typeof Otp, 'onChange'> = (text) => handleEventChange(text);
 
     const sharedProps: OTPProps = {
         onChange,

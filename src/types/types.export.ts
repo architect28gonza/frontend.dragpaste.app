@@ -39,3 +39,8 @@ export interface PropsIGeneric {
         column: number;
     };
 };
+
+export interface IColumnRow {
+    column: number;
+    row: number;
+}

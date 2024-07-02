@@ -1,14 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, FC } from 'react';
 import InLabel from './Label';
 
 import { Avatar, Button, Checkbox, Space } from 'antd';
-import { PropsIGeneric } from '../../types/types.export';
+import { IColumnRow, PropsIGeneric } from '../../types/types.export';
 import { getProps } from '../../util/Props.util';
 import { buttonRemove, labelTextStyle } from '../../assets/styles/styles';
 import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
-import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { deleteFromLocalStorage, objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
 import { openNotificationWithIcon } from '../../util/Message.util'
-import { UnorderedListOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface CheckboxItem {
 	position: number;
@@ -16,12 +16,13 @@ interface CheckboxItem {
 	isCheck: boolean;
 }
 
-const InCheckbox: React.FC<PropsIGeneric> = ({ propsComponent }) => {
+const InCheckbox: FC<PropsIGeneric> = ({ propsComponent }) => {
 	const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
 	const initialItems: CheckboxItem[] | string = body || [{ position: 1, value: '', isCheck: false }];
 
 	const [items, setItems] = useState<CheckboxItem[]>((typeof initialItems !== "string") ? initialItems : []);
 	const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
+	const [positionRemove, setPositionRemove] = useState<IColumnRow>({ row, column })
 
 	const addItem = () => {
 		setItems(prevItems => [
@@ -60,6 +61,7 @@ const InCheckbox: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 			return;
 		}
 
+		setPositionRemove({ row: indexRow, column: indexColumn });
 		const updatedItems = items.map(it => it.position === item.position ? { ...it, isCheck: !it.isCheck } : it);
 		setItems(updatedItems);
 
@@ -96,12 +98,12 @@ const InCheckbox: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 				+
 			</Button>
 			<Space size={16} wrap>
-                <Avatar style={buttonRemove} 
-                    onClick={() => alert("asdadasdasdasd")}
-                    shape="circle" 
-                    size="small" 
-                    icon={<UnorderedListOutlined />} />
-            </Space>
+				<Avatar style={buttonRemove}
+					onClick={() => deleteFromLocalStorage(positionRemove)}
+					shape="circle"
+					size="small"
+					icon={<DeleteOutlined />} />
+			</Space>
 		</div>
 	);
 };

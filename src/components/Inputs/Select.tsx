@@ -1,21 +1,22 @@
-import React, { ChangeEvent, JSXElementConstructor, ReactElement, useRef, useState } from 'react';
+import { ChangeEvent, JSXElementConstructor, ReactElement, useRef, useState, FC } from 'react';
 import InLabel from './Label';
-import { PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Avatar, Button, Divider, Input, Select, Space } from 'antd';
 import { buttonRemove, inputStyle } from '../../assets/styles/styles';
-import { PropsIGeneric } from '../../types/types.export';
+import { IColumnRow, PropsIGeneric } from '../../types/types.export';
 import { getProps } from '../../util/Props.util';
 import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
-import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
+import { deleteFromLocalStorage, objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
 import { openNotificationWithIcon } from '../../util/Message.util';
 import type { InputRef } from 'antd';
 
-const InSelect: React.FC<PropsIGeneric> = ({ propsComponent }) => {
+const InSelect: FC<PropsIGeneric> = ({ propsComponent }) => {
     const { label, body, row, column, isPositionNegative }: any = getProps(propsComponent);
 
     const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
     const [items, setItems] = useState<string[]>((body?.lstItems) ?? []);
     const [name, setName] = useState('');
+    const [position, setPosition] = useState<IColumnRow>({ row, column });
     const [valueSelect, setValueSelect] = useState<string>(body?.value);
     const inputRef = useRef<InputRef>(null);
 
@@ -23,9 +24,9 @@ const InSelect: React.FC<PropsIGeneric> = ({ propsComponent }) => {
     const getIndexRow = (row: number, event: ChangeEvent<HTMLInputElement>) => isPositionNegative() ? row : getColumnRowFromEvent(event).row;
 
     const handleChangeSelect = (value: string) => {
-        
+
         if (!event) return;
-        
+
         if ((!event) && !isPositionNegative()) {
             openNotificationWithIcon();
             return;
@@ -33,6 +34,7 @@ const InSelect: React.FC<PropsIGeneric> = ({ propsComponent }) => {
 
         const indexColumn = getIndexColumn(column, event);
         const indexRow = getIndexRow(row, event);
+        setPosition({ row: indexRow, column: indexColumn })
 
         if (!isValidColumn(indexColumn)) {
             console.error('La columna no es válida - Select');
@@ -112,11 +114,11 @@ const InSelect: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 options={items.map((item, index) => ({ label: item, value: index }))}
             />
             <Space size={16} wrap>
-                <Avatar style={buttonRemove} 
-                    onClick={() => alert("asdadasdasdasd")}
-                    shape="circle" 
-                    size="small" 
-                    icon={<UnorderedListOutlined />} />
+                <Avatar style={buttonRemove}
+                    onClick={() => deleteFromLocalStorage(position)}
+                    shape="circle"
+                    size="small"
+                    icon={<DeleteOutlined />} />
             </Space>
         </div>
     );

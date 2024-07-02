@@ -1,47 +1,20 @@
-import React, { ChangeEvent, useState } from 'react';
+import { FC } from 'react';
 import { Avatar, Space, TimePicker, TimePickerProps } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { buttonRemove, inputStyle } from '../../assets/styles/styles';
 import InLabel from './Label';
 import { PropsIGeneric } from '../../types/types.export';
-import { getProps } from '../../util/Props.util';
-
-import { getColumnRowFromEvent, isValidColumn } from '../../util/Position.util';
-import { objectLocalStorage, updateLocalStorageObject } from '../../util/LocalStorage.util';
-import { openNotificationWithIcon } from '../../util/Message.util';
-import { UnorderedListOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
+import useEventHandling from '../../hooks/useEventHandling';
+import { deleteFromLocalStorage } from '../../util/LocalStorage.util';
 
 dayjs.extend(customParseFormat);
 
-const InTimer: React.FC<PropsIGeneric> = ({ propsComponent }) => {
+const InTimer: FC<PropsIGeneric> = ({ propsComponent }) => {
 
-    const { label, body, row, column, isPositionNegative } = getProps(propsComponent);
-    const [value, setValue] = useState<any>(body);
-    const [event, setEvent] = useState<ChangeEvent<HTMLInputElement>>();
-
-    const onChangeTimer: TimePickerProps['onChange'] = (_, timeString) => {
-        if ((!event) || (event === undefined) && (!isPositionNegative())) {
-            openNotificationWithIcon();
-            return;
-        }
-
-        const indexColumn = isPositionNegative() ? column : getColumnRowFromEvent(event).column;
-        const indexRow = isPositionNegative() ? row : getColumnRowFromEvent(event).row;
-
-        if (!isValidColumn(indexColumn)) {
-            console.error("La columna no es válida - Date");
-            return;
-        }
-
-        const object = objectLocalStorage(indexRow, indexColumn);
-        if (object) {
-            const newValue = timeString;
-            object.body = newValue;
-            updateLocalStorageObject(object, indexRow, indexColumn);
-            setValue(newValue);
-        } else openNotificationWithIcon();
-    };
+    const { handleEventChange, setEvent, label, value, position } = useEventHandling(propsComponent);
+    const onChangeTimer: TimePickerProps['onChange'] = (_, timeString) => handleEventChange(timeString);
 
     return (
         <div className='container-in-timer'>
@@ -53,10 +26,10 @@ const InTimer: React.FC<PropsIGeneric> = ({ propsComponent }) => {
                 defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
             <Space size={16} wrap>
                 <Avatar style={buttonRemove}
-                    onClick={() => alert("asdadasdasdasd")}
+                    onClick={() => deleteFromLocalStorage(position)}
                     shape="circle"
                     size="small"
-                    icon={<UnorderedListOutlined />} />
+                    icon={<DeleteOutlined />} />
             </Space>
         </div>
 
