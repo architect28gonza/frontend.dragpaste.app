@@ -14,6 +14,7 @@ const Content: FC = () => {
         <Breadcrumb />
         <ContentLayout style={ContentLayoutCss(colorBgContainer, borderRadiusLG)}>
             <div className="App">
+                {/* Contenido de formulario */}
                 <Button type="link" onClick={onClickForm}>{nameButton}</Button>
                 <DragDropProvider data={columnsElement}>
                     <Board />

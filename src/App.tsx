@@ -4,6 +4,7 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/
 import Header from './layout/Header/Header';
 import Sider from './layout/SideBar/Sider';
 import Content from './layout/Content/Content';
+import Login from './pages/LoginPage/Login';
 
 const generateNavItems = (count: number, prefix = 'Configuracion') => {
    return Array.from({ length: count }, (_, index) => ({
@@ -27,13 +28,15 @@ const App: React.FC = () => {
    const subMenuItems = generateSubMenuItems(3);
 
    return (
-      <Layout>
-         <Header lstHeaderItems={navItems} />
-         <Layout>
-            <Sider lstSiderItems={subMenuItems} />
-            <Content />
-         </Layout>
-      </Layout>
+      // <Layout>
+      //    <Header lstHeaderItems={navItems} />
+      //    <Layout>
+      //       <Sider lstSiderItems={subMenuItems} />
+      //       <Content />
+      //    </Layout>
+      // </Layout>
+
+      <Login />
    );
 };
 

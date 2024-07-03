@@ -1,0 +1,25 @@
+.container-login {
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    background-color: rgba(223, 223, 223, 0.4);
+}
+
+.card-login {
+
+    width: 900px !important;
+    height: 400px;
+    border-radius: 9px;
+    border: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url("../../assets//images//bgCardLogin.png");
+    background-size: cover;
+}
+
+.reset-password {
+    cursor: pointer;
+}

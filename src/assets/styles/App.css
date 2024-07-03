@@ -5,6 +5,14 @@ body {
     overflow: auto;
 }
 
+.text-color-global {
+    color: rgb(92, 92, 92);
+}
+
+.text-color-title-global {
+    color: rgb(109, 109, 109) !important
+}
+
 #content_0 {
     height: auto;
     padding: 8px;
